@@ -46,16 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         addStartingCursor();
-
-        Button button = findViewById(R.id.output_field);
-        button.setOnClickListener(v -> Log.d("BUTTONS", "User tapped the Supabutton"));
-
-        try {
-            Double myValue = new Convert().x_y(10, "in", "mm");
-            Log.d("onCreate", myValue.toString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Double myValue = new Convert().x_y(10, "in", "mm");
 
         displayNumKeys();
         displayOperations();

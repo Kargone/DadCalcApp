@@ -31,19 +31,22 @@ public class Convert {
     public double ft_mm(double feet) {
         return feet * INCHES_IN_FEET * MILLIMETERS_IN_INCHES;
     }
-    public Double x_y(double value, String x, String y) throws Exception {
+    public Double x_y(double value, String x, String y) {
         final String[] convertTypes = {"mm", "ft", "in"};
         List<String> convertTypesList = Arrays.asList(convertTypes);
 
         if (Objects.equals(x, y)) return value;
-
-        if (convertTypesList.contains(x) && convertTypesList.contains(y)) {
-            String convertMethodName = x + "_" + y;
-            Method convertMethod = this.getClass().getMethod(convertMethodName, double.class);
-            String convertedValue = Objects.requireNonNull(convertMethod.invoke(this, value)).toString();
-            return Double.parseDouble(convertedValue);
+        try {
+            if (convertTypesList.contains(x) && convertTypesList.contains(y)) {
+                String convertMethodName = x + "_" + y;
+                Method convertMethod = this.getClass().getMethod(convertMethodName, double.class);
+                String convertedValue = Objects.requireNonNull(convertMethod.invoke(this, value)).toString();
+                return Double.parseDouble(convertedValue);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-        throw new Exception("Invalid convert types: " + x + " " + y);
+        throw new RuntimeException("Invalid convert types: " + x + " " + y);
     }
 }
