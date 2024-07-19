@@ -363,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
     private double evaluate(List<String> inputObject) {
         return 0;
     }
-    // TODO: finish
+    // TODO: Finish
     private List<String> convertToInputList(String input) {
         return inputObject;
     }
