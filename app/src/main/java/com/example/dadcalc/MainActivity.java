@@ -274,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void displayAndActivateEquals() {
-        // TODO: Finish
         TextView equalObject = setTextAndGetTextView("key_equal", "=");
         equalObject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,8 +315,9 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         throw new RuntimeException("Invalid operation type: " + operationType);
                 }
-                String newInputObject = String.valueOf(roundTo7th(evaluatedInputObject)).concat(CURSOR);
+                String newInputObject = String.valueOf(roundTo7th(evaluatedInputObject));
                 inputObject = convertToInputList(newInputObject);
+                inputObject.add(CURSOR);
             }
         });
     }
@@ -365,7 +365,41 @@ public class MainActivity extends AppCompatActivity {
     }
     // TODO: Finish
     private List<String> convertToInputList(String input) {
-        return inputObject;
+        List<String> outputObject = new ArrayList<>();
+        String[] inputCharacters = input.split("");
+        int noUpdateOutputFor = 0;
+
+        for (String inputCharacter : inputCharacters) {
+            if (noUpdateOutputFor > 0) {
+                noUpdateOutputFor--;
+                continue;
+            }
+//            if (element === '(') {
+//                String startOfUnitName = temp_output_text[parseInt(index) + 1];
+//                switch (startOfUnitName) {
+//                    case "m":
+//                        output_array.push('(mm) ');
+//                        no_update_for = 3;
+//                        break;
+//                    case "i":
+//                        output_array.push('(in) ');
+//                        no_update_for = 3;
+//                        break;
+//                    case "f":
+//                        output_array.push('(ft) ');
+//                        no_update_for = 3;
+//                        break;
+//                    default:
+//                        output_array.push(element);
+//                }
+//                continue;
+//            }
+//            if (element === '|') continue;
+//            if (element === ' ') continue;
+//            output_array.push(element);
+        }
+
+        return outputObject;
     }
     private double roundTo7th(double value) {
         return (double) Math.round(value * 10000000) / 10000000;
