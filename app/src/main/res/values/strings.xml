@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">DadCalc</string>
+
+    <string name="input_label">INPUT · TAP TO MOVE CURSOR · HOLD DEL TO CLEAR</string>
+    <string name="output_label">OUTPUT · TAP TO CHANGE UNIT</string>
+    <string name="output_label_selected">OUTPUT · PICK A UNIT, FRAC FOR FRACTIONS</string>
+    <string name="error">ERROR</string>
+
+    <string name="history_title">History · tap to insert result</string>
+    <string name="history_empty">No history yet</string>
+    <string name="clear_history">Clear</string>
+    <string name="saved_to_history">Saved to history</string>
+
+    <string name="key_0" translatable="false">0</string>
+    <string name="key_1" translatable="false">1</string>
+    <string name="key_2" translatable="false">2</string>
+    <string name="key_3" translatable="false">3</string>
+    <string name="key_4" translatable="false">4</string>
+    <string name="key_5" translatable="false">5</string>
+    <string name="key_6" translatable="false">6</string>
+    <string name="key_7" translatable="false">7</string>
+    <string name="key_8" translatable="false">8</string>
+    <string name="key_9" translatable="false">9</string>
+    <string name="key_decimal" translatable="false">.</string>
+    <string name="key_left_arrow" translatable="false">←</string>
+    <string name="key_right_arrow" translatable="false">→</string>
+    <string name="key_inch" translatable="false">in</string>
+    <string name="key_feet" translatable="false">ft</string>
+    <string name="key_millimeter" translatable="false">mm</string>
+    <string name="key_left_parenthesis" translatable="false">(</string>
+    <string name="key_right_parenthesis" translatable="false">)</string>
+    <string name="key_add" translatable="false">+</string>
+    <string name="key_subtract" translatable="false">−</string>
+    <string name="key_multiply" translatable="false">×</string>
+    <string name="key_divide" translatable="false">÷</string>
+    <string name="key_equal" translatable="false">=</string>
+    <string name="key_fraction_slot" translatable="false">1/%s</string>
+    <string name="key_history">HISTORY</string>
+    <string name="key_fraction">FRAC</string>
+    <string name="key_delete">DEL</string>
+    <string name="key_round">ROUND</string>
+    <string name="key_round_to">ROUND\n1/%d</string>
+
+    <string name="move_cursor_left">Move cursor left</string>
+    <string name="move_cursor_right">Move cursor right</string>
+    <string name="delete_description">Delete, hold to clear</string>
 </resources>

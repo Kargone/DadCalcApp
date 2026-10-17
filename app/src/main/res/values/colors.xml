@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <color name="app_background">#EEEBE5</color>
+    <color name="display_background">#FFFFFF</color>
+    <color name="display_stroke">#DCD7CD</color>
+    <color name="display_stroke_selected">#CF6A1A</color>
+    <color name="display_text">#1B1B1B</color>
+    <color name="display_label">#77716A</color>
+    <color name="cursor">#CF6A1A</color>
+
+    <color name="key_digit">#FFFFFF</color>
+    <color name="key_digit_text">#1B1B1B</color>
+    <color name="key_function">#DFDAD0</color>
+    <color name="key_function_text">#2B2B2B</color>
+    <color name="key_unit">#D3E5EA</color>
+    <color name="key_unit_text">#164552</color>
+    <color name="key_fraction">#F5E2B8</color>
+    <color name="key_fraction_text">#6B4A00</color>
+    <color name="key_operator">#CF6A1A</color>
+    <color name="key_operator_text">#FFFFFF</color>
+    <color name="key_equals">#2F7D4F</color>
+    <color name="key_equals_text">#FFFFFF</color>
+    <!-- Keys that are toggled on: output unit, FRAC output, ROUND and the picked rounding -->
+    <color name="key_active">#1E6F80</color>
+    <color name="key_active_text">#FFFFFF</color>
+    <color name="key_ripple">#26000000</color>
 </resources>

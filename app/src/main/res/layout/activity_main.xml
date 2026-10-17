@@ -1,239 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/output_field"
-        style="@android:style/Widget.Holo.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:background="@color/white"
-        android:text="Output"
-        android:textSize="25sp"
-        app:layout_constraintHorizontal_bias="0.0"
-        tools:ignore="MissingConstraints" />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/output_card"
+        style="@style/DisplayCard"
+        android:layout_weight="1.25">
 
-    <TextView
-        android:id="@+id/input_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Input"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/output_field" />
-
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="403dp"
-        android:layout_height="766dp"
-        android:stretchColumns="0, 1, 2, 3, 4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_field"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TableRow>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp">
 
             <TextView
+                android:id="@+id/output_label"
+                style="@style/DisplayLabel"
+                android:text="@string/output_label" />
+
+            <TextView
+                android:id="@+id/output_field"
+                style="@style/DisplayValue.Output"
+                tools:text="5 ft 3 1/16 in" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/input_card"
+        style="@style/DisplayCard"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                style="@style/DisplayLabel"
+                android:text="@string/input_label" />
+
+            <TextView
+                android:id="@+id/input_field"
+                style="@style/DisplayValue.Input"
+                tools:text="5 ft 3 1/16 in|" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="6.5"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/KeyRow">
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_left_arrow"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:contentDescription="@string/move_cursor_left"
+                android:text="@string/key_left_arrow" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_right_arrow"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:contentDescription="@string/move_cursor_right"
+                android:text="@string/key_right_arrow" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_inch_selector"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Unit"
+                android:text="@string/key_inch" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_feet_selector"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Unit"
+                android:text="@string/key_feet" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_millimeter_selector"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
+                style="@style/Key.Unit"
+                android:text="@string/key_millimeter" />
+        </LinearLayout>
 
-        <TableRow>
+        <LinearLayout style="@style/KeyRow">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_left_parenthesis"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:text="@string/key_left_parenthesis" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_right_parenthesis"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:text="@string/key_right_parenthesis" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_history"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:text="@string/key_history" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_fraction_1"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Fraction"
+                tools:text="1/2" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_multiply"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
+                style="@style/Key.Operator"
+                android:text="@string/key_multiply" />
+        </LinearLayout>
 
-        <TableRow>
+        <LinearLayout style="@style/KeyRow">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_7"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_7" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_8"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_8" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_9"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_9" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_fraction_2"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Fraction"
+                tools:text="1/4" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_divide"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
+                style="@style/Key.Operator"
+                android:text="@string/key_divide" />
+        </LinearLayout>
 
-        <TableRow>
+        <LinearLayout style="@style/KeyRow">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_4"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_4" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_5"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_5" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_6"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_6" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_fraction_3"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Fraction"
+                tools:text="1/8" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_add"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
+                style="@style/Key.Operator"
+                android:text="@string/key_add" />
+        </LinearLayout>
 
-        <TableRow>
+        <LinearLayout style="@style/KeyRow">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_1"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_1" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_2"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_2" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_3"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_3" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_fraction"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:text="@string/key_fraction" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_subtract"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
+                style="@style/Key.Operator"
+                android:text="@string/key_subtract" />
+        </LinearLayout>
 
-        <TableRow>
+        <LinearLayout style="@style/KeyRow">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_0"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_0" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_decimal"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Digit"
+                android:text="@string/key_decimal" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_delete"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:contentDescription="@string/delete_description"
+                android:text="@string/key_delete" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_round"
-                android:gravity="center"
-                android:padding="3dip" />
+                style="@style/Key.Function"
+                android:maxLines="2"
+                android:text="@string/key_round" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_equal"
-                android:gravity="center"
-                android:padding="3dip" />
-        </TableRow>
-    </TableLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="79dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6005089" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+                style="@style/Key.Equals"
+                android:text="@string/key_equal" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
