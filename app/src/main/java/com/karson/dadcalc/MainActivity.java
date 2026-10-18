@@ -464,6 +464,8 @@ public class MainActivity extends AppCompatActivity {
         }
         fractionKey.setActivated(doFractionOutput);
         roundKey.setActivated(roundOutput);
+        // Only "ROUND\n1/16" needs two lines; allowing two for plain "ROUND" lets autosize split the word
+        roundKey.setMaxLines(roundOutput ? 2 : 1);
         roundKey.setText(roundOutput ? getString(R.string.key_round_to, roundTo) : getString(R.string.key_round));
     }
 
