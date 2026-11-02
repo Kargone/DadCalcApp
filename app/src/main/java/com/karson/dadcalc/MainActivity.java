@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     // Double tap state, cleared by resetDoubleTaps()
     /** Operator just typed. Pressing = right away repeats it using {@link #operationEqualsMemory}. */
     private String repeatOperation = null;
-    private double operationEqualsMemory = 0;
+    private List<String> operationEqualsMemory = new ArrayList<>();
     private boolean doingOperationStreak = false;
     /** Right after ROUND is turned on, the fraction keys pick what to round to. */
     private boolean pickingRoundTo = false;
@@ -178,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(keyId).setOnClickListener(v -> {
             resetDoubleTaps();
             try {
-                operationEqualsMemory = Evaluator.evaluate(inputObject, unitOutputType);
+                Evaluator.evaluate(inputObject, unitOutputType);
+                operationEqualsMemory = new ArrayList<>(inputObject);
+                operationEqualsMemory.remove(Tokens.CURSOR);
                 repeatOperation = operation;
             } catch (IllegalArgumentException e) {
                 repeatOperation = null;
@@ -342,8 +344,17 @@ public class MainActivity extends AppCompatActivity {
                 doingOperationStreak = true;
             }
             try {
-                double current = Evaluator.evaluate(inputObject, unitOutputType);
-                double result = executeOperation(repeatOperation, current, operationEqualsMemory);
+                // Evaluated as "(current) op (memory)" so units follow the same rules as typing it
+                List<String> repeated = new ArrayList<>();
+                repeated.add(Tokens.OPEN);
+                repeated.addAll(inputObject);
+                repeated.remove(Tokens.CURSOR);
+                repeated.add(Tokens.CLOSE);
+                repeated.add(repeatOperation);
+                repeated.add(Tokens.OPEN);
+                repeated.addAll(operationEqualsMemory);
+                repeated.add(Tokens.CLOSE);
+                double result = Evaluator.evaluate(repeated, unitOutputType);
                 List<String> resultTokens = Tokens.fromValue(result, unitOutputType);
                 inputObject.clear();
                 inputObject.addAll(resultTokens);
@@ -354,21 +365,6 @@ public class MainActivity extends AppCompatActivity {
             selectedScreen = INPUT_SCREEN;
             updateScreens();
         });
-    }
-
-    private static double executeOperation(String operation, double left, double right) {
-        switch (operation) {
-            case Tokens.ADD:
-                return left + right;
-            case Tokens.SUBTRACT:
-                return left - right;
-            case Tokens.MULTIPLY:
-                return left * right;
-            case Tokens.DIVIDE:
-                return left / right;
-            default:
-                throw new IllegalArgumentException("Invalid operation type: " + operation);
-        }
     }
 
     private void typeIntoInput(String token) {

@@ -14,17 +14,33 @@ import java.util.List;
  *   quantity    := "(" expression [")"] [unit] | number [unit]
  *   number      := digits ["." digits] ["⁄" digits]
  *
- * Numbers without a unit are inches, the same as the web version.
+ * Lengths are worked out in inches and only the final answer is converted, so the answer is the same
+ * length whatever the output unit. A number without a unit stays a plain number until it meets a length
+ * or is the answer, and then it's in the default unit: inches, or the unit after its group, so
+ * "(2 × 3) ft" is 6 ft. Dividing a length by a length gives how many fit, in the first one's unit,
+ * so "10 ft ÷ 2 ft" is 5 ft.
  */
 public final class Evaluator {
     private final List<String> tokens;
-    private final String outputUnit;
     private int position = 0;
     private boolean lastQuantityHadUnit = false;
+    private String defaultUnit = Convert.INCHES;
 
-    private Evaluator(List<String> tokens, String outputUnit) {
+    /** A plain number, or a length in inches. The unit is the one it was typed in, or null when mixed or none. */
+    private static final class Value {
+        final double number;
+        final boolean isLength;
+        final String unit;
+
+        Value(double number, boolean isLength, String unit) {
+            this.number = number;
+            this.isLength = isLength;
+            this.unit = unit;
+        }
+    }
+
+    private Evaluator(List<String> tokens) {
         this.tokens = tokens;
-        this.outputUnit = outputUnit;
     }
 
     /** @throws IllegalArgumentException if the input isn't a valid calculation */
@@ -37,65 +53,129 @@ public final class Evaluator {
         }
         if (tokens.isEmpty()) return 0;
 
-        Evaluator evaluator = new Evaluator(tokens, outputUnit);
-        double result = evaluator.parseExpression();
+        Evaluator evaluator = new Evaluator(tokens);
+        double inches = evaluator.toLength(evaluator.parseExpression()).number;
         if (evaluator.peek() != null) throw new IllegalArgumentException("Unexpected token: " + evaluator.peek());
-        if (Double.isNaN(result) || Double.isInfinite(result)) throw new IllegalArgumentException("Result is not a number");
-        return result;
+        if (Double.isNaN(inches) || Double.isInfinite(inches)) throw new IllegalArgumentException("Result is not a number");
+        return Convert.x_y(inches, Convert.INCHES, outputUnit);
     }
 
     private static boolean isUnfinished(String token) {
         return Tokens.isOperator(token) || Tokens.FRACTION_BAR.equals(token) || Tokens.OPEN.equals(token);
     }
 
-    private double parseExpression() {
-        double value = parseTerm();
+    private Value parseExpression() {
+        Value value = parseTerm();
         while (true) {
-            if (accept(Tokens.ADD)) value += parseTerm();
-            else if (accept(Tokens.SUBTRACT)) value -= parseTerm();
+            if (accept(Tokens.ADD)) value = add(value, parseTerm(), 1);
+            else if (accept(Tokens.SUBTRACT)) value = add(value, parseTerm(), -1);
             else return value;
         }
     }
 
-    private double parseTerm() {
-        double value = parseFactor();
+    private Value parseTerm() {
+        Value value = parseFactor();
         while (true) {
-            if (accept(Tokens.MULTIPLY)) value *= parseFactor();
-            else if (accept(Tokens.DIVIDE)) value /= parseFactor();
-            else if (Tokens.OPEN.equals(peek()) || (followsGroup() && startsNumber(peek()))) value *= parseFactor();
+            if (accept(Tokens.MULTIPLY)) value = multiply(value, parseFactor());
+            else if (accept(Tokens.DIVIDE)) value = divide(value, parseFactor());
+            else if (Tokens.OPEN.equals(peek()) || (followsGroup() && startsNumber(peek()))) value = multiply(value, parseFactor());
             else return value;
         }
     }
 
-    private double parseFactor() {
-        if (accept(Tokens.SUBTRACT)) return -parseFactor();
+    private Value parseFactor() {
+        if (accept(Tokens.SUBTRACT)) {
+            Value value = parseFactor();
+            return new Value(-value.number, value.isLength, value.unit);
+        }
         if (accept(Tokens.ADD)) return parseFactor();
         return parseMeasurement();
     }
 
-    private double parseMeasurement() {
-        double total = parseQuantity();
+    private Value parseMeasurement() {
+        Value total = parseQuantity();
         while (lastQuantityHadUnit && startsNumber(peek())) {
-            total += parseQuantity();
+            // A bare number here is the inches in "5 ft 3"
+            Value next = parseQuantity();
+            if (!next.isLength) next = inUnit(next.number, Convert.INCHES);
+            total = add(total, next, 1);
         }
         return total;
     }
 
-    private double parseQuantity() {
+    private Value parseQuantity() {
         if (accept(Tokens.OPEN)) {
-            double value = parseExpression();
+            // A unit after the group is the unit for the plain numbers inside it, so "(2 + 3) ft" is 5 ft
+            String groupUnit = unitAfterGroup();
+            String outerDefaultUnit = defaultUnit;
+            if (groupUnit != null) defaultUnit = groupUnit;
+            Value value = parseExpression();
+            defaultUnit = outerDefaultUnit;
             // A missing ")" is fine at the very end so "(2 + 3" still previews
             if (!accept(Tokens.CLOSE) && peek() != null) throw new IllegalArgumentException("Expected ): " + peek());
-            // A unit after a group is ignored, the same as the web version
-            if (Convert.isUnit(peek())) position++;
-            lastQuantityHadUnit = false;
-            return value;
+            lastQuantityHadUnit = groupUnit != null;
+            if (groupUnit == null) return value;
+            position++;
+            return value.isLength ? value : inUnit(value.number, groupUnit);
         }
-        double value = parseNumber();
-        String unit = Convert.INCHES;
+        double number = parseNumber();
         lastQuantityHadUnit = Convert.isUnit(peek());
-        if (lastQuantityHadUnit) unit = tokens.get(position++);
-        return Convert.x_y(value, unit, outputUnit);
+        if (!lastQuantityHadUnit) return new Value(number, false, null);
+        return inUnit(number, tokens.get(position++));
+    }
+
+    /** The unit right after the ")" that closes the group just opened, or null */
+    private String unitAfterGroup() {
+        int depth = 1;
+        for (int i = position; i < tokens.size(); i++) {
+            if (Tokens.OPEN.equals(tokens.get(i))) depth++;
+            else if (Tokens.CLOSE.equals(tokens.get(i)) && --depth == 0) {
+                String next = i + 1 < tokens.size() ? tokens.get(i + 1) : null;
+                return Convert.isUnit(next) ? next : null;
+            }
+        }
+        return null;
+    }
+
+    private static Value inUnit(double number, String unit) {
+        return new Value(Convert.x_y(number, unit, Convert.INCHES), true, unit);
+    }
+
+    private Value toLength(Value value) {
+        if (value.isLength) return value;
+        return inUnit(value.number, value.unit != null ? value.unit : defaultUnit);
+    }
+
+    private Value add(Value left, Value right, int sign) {
+        if (!left.isLength && !right.isLength) {
+            return new Value(left.number + sign * right.number, false, firstUnit(left, right));
+        }
+        Value a = toLength(left);
+        Value b = toLength(right);
+        return new Value(a.number + sign * b.number, true, sharedUnit(a, b));
+    }
+
+    private Value multiply(Value left, Value right) {
+        if (!left.isLength && !right.isLength) return new Value(left.number * right.number, false, firstUnit(left, right));
+        if (!left.isLength) return new Value(left.number * right.number, true, right.unit);
+        if (!right.isLength) return new Value(left.number * right.number, true, left.unit);
+        // Length × length multiplies the inches
+        return new Value(left.number * right.number, true, sharedUnit(left, right));
+    }
+
+    private Value divide(Value left, Value right) {
+        if (!right.isLength) return new Value(left.number / right.number, left.isLength, firstUnit(left, right));
+        // Length ÷ length is how many fit, kept in the first length's unit
+        Value a = toLength(left);
+        return new Value(a.number / right.number, false, firstUnit(a, right));
+    }
+
+    private static String firstUnit(Value a, Value b) {
+        return a.unit != null ? a.unit : b.unit;
+    }
+
+    private static String sharedUnit(Value a, Value b) {
+        return a.unit != null && a.unit.equals(b.unit) ? a.unit : null;
     }
 
     private double parseNumber() {
