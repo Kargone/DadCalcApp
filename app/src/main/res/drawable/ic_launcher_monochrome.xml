@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One-colour tape measure for Android 13+ themed icons; the hub is cut out of the case so it still reads -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Scaled down so the whole drawing fits in the round 66dp safe zone -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:translateY="2">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M36,28h16a13,13 0,0 1,13 13v20a13,13 0,0 1,-13 13h-16a13,13 0,0 1,-13 -13v-20a13,13 0,0 1,13 -13z M44,40a11,11 0,1 0,0 22a11,11 0,1 0,0 -22z M44,47a4,4 0,1 1,0 8a4,4 0,1 1,0 -8z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M38,24h12a2,2 0,0 1,2 2v2h-16v-2a2,2 0,0 1,2 -2z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M65,63h17v11h-17z M66.5,63h1.6v3.5h-1.6z M71,63h1.6v6h-1.6z M75.5,63h1.6v3.5h-1.6z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M80,58h5v19h-5z" />
+    </group>
+</vector>
