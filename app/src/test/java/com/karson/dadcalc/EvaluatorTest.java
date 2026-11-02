@@ -6,19 +6,15 @@ import static org.junit.Assert.assertThrows;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class EvaluatorTest {
     private static final double DELTA = 1e-9;
     private static final String F = Tokens.FRACTION_BAR;
     private static final String C = Tokens.CURSOR;
 
-    private static List<String> tokens(String... tokens) {
-        return Arrays.asList(tokens);
-    }
-
-    private static double evaluate(String unit, String... tokens) {
-        return Evaluator.evaluate(tokens(tokens), unit);
+    /** Evaluates the keys pressed, like "1", "0", "ft", in the given output unit */
+    private static double evaluate(String unit, String... keys) {
+        return Evaluator.evaluate(Arrays.asList(keys), unit);
     }
 
     @Test
